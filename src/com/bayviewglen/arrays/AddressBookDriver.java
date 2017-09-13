@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class AddressBookDriver {
@@ -17,7 +16,6 @@ public class AddressBookDriver {
 		boolean demo = true;
 		String option, first, last, number;
 		Scanner keyboard = new Scanner(System.in);
-		int numContacts = 0;
 		Contact newContact;
 
 		System.out.println("Welcome to Contacts.");
@@ -115,6 +113,7 @@ public class AddressBookDriver {
 		System.out.println("5: Exit");
 		System.out.println();
 		System.out.print("Enter one of the options above: ");
+		System.out.println();
 		return textCheck(keyboard.nextLine());
 	}
 

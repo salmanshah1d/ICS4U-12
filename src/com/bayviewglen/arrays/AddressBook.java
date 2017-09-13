@@ -13,16 +13,11 @@ public class AddressBook {
 
 	public String toString() {
 		String print = "";
-		Contact[] tempArr = new Contact[numContacts];
 
-		for (int i = 0; i < numContacts; i++) {
-			tempArr[i] = contacts[i];
-		}
-
-		Arrays.sort(tempArr, new SortClassByName());
+		Arrays.sort(contacts, 0, numContacts, new SortClassByName());
 
 		for (int j = 0; j < numContacts; j++) {
-			print += tempArr[j] + "\n";
+			print += contacts[j] + "\n";
 		}
 
 		return print;
