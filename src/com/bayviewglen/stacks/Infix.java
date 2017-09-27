@@ -3,7 +3,8 @@ package com.bayviewglen.stacks;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
-import java.util.Stack;
+
+import com.bayviewglen.utils.Stack;
 
 public class Infix {
 
@@ -18,8 +19,8 @@ public class Infix {
 	}
 
 	private static String evaluateInfix(String[] string) {
-		Stack<String> operators = new Stack<String>();
-		Stack<Double> numbers = new Stack<Double>();
+		Stack operators = new Stack();
+		Stack numbers = new Stack();
 		boolean valid = true;
 		String operator = "()*/+-";
 		Double numOne = 0.0;
@@ -27,28 +28,28 @@ public class Infix {
 		for (int i = 0; i < string.length && valid; i++) {
 			if (operator.indexOf(string[i]) != -1) {
 				if (string[i].equals(")")) {
-					if (operators.isEmpty()) {
+					if (operators.empty()) {
 						valid = false;
 					} else if (operators.peek().equals("(")) {
 						operators.pop();
 					} else if (operators.peek().equals("+")) {
-						numOne = numbers.pop();
-						numbers.push(numbers.pop() + numOne);
+						numOne = (Double) numbers.pop();
+						numbers.push((Double)numbers.pop() + numOne);
 						operators.pop();
 						operators.pop();
 					} else if (operators.peek().equals("-")) {
-						numOne = numbers.pop();
-						numbers.push(numbers.pop() - numOne);
+						numOne = (Double) numbers.pop();
+						numbers.push((Double)numbers.pop() - numOne);
 						operators.pop();
 						operators.pop();
 					} else if (operators.peek().equals("*")) {
-						numOne = numbers.pop();
-						numbers.push(numbers.pop() * numOne);
+						numOne = (Double) numbers.pop();
+						numbers.push((Double)numbers.pop() * numOne);
 						operators.pop();
 						operators.pop();
 					} else {
-						numOne = numbers.pop();
-						numbers.push(numbers.pop() / numOne);
+						numOne = (Double) numbers.pop();
+						numbers.push((Double)numbers.pop() / numOne);
 						operators.pop();
 						operators.pop();
 					}
@@ -58,19 +59,19 @@ public class Infix {
 
 			} else {
 				if (operators.peek().equals("+")) {
-					numOne = numbers.pop();
+					numOne = (Double)numbers.pop();
 					numbers.push(new Double(string[i]) + numOne);
 					operators.pop();
 				} else if (operators.peek().equals("-")) {
-					numOne = numbers.pop();
+					numOne = (Double)numbers.pop();
 					numbers.push(new Double(string[i]) - numOne);
 					operators.pop();
 				} else if (operators.peek().equals("*")) {
-					numOne = numbers.pop();
+					numOne = (Double)numbers.pop();
 					numbers.push(new Double(string[i]) * numOne);
 					operators.pop();
 				} else if (operators.peek().equals("/")) {
-					numOne = numbers.pop();
+					numOne = (Double)numbers.pop();
 					numbers.push(new Double(string[i]) / numOne);
 					operators.pop();
 				} else {
