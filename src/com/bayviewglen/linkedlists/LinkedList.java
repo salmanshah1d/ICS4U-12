@@ -39,12 +39,9 @@ public class LinkedList {
 		if (numNodes == 0) {
 			addFirst(value);
 		} else {
-			IntNode current = head;
-			for (int i = 0; i < numNodes - 1; i++) {
-				current = current.getLink();
-			}
-			current.setLink(new IntNode(value, null));
-			tail = current.getLink();
+			IntNode newNode = new IntNode(value, null);
+			tail.setLink(newNode);
+			tail = newNode;
 			numNodes++;
 		}
 		return true;
@@ -221,5 +218,16 @@ public class LinkedList {
 			current = current.getLink();
 		}
 		return arr;
+	}
+	
+	public String toString() {
+		String str = "";
+		int[] arr = this.toArr();
+		str += ("[");
+		for (int i = 0; i < arr.length-1; i++) {
+			str += (arr[i] + " ");
+		}
+		str += (arr[arr.length-1] + "]");
+		return str;
 	}
 }
