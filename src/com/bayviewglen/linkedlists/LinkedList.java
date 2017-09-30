@@ -101,16 +101,27 @@ public class LinkedList {
 		if (index > numNodes) {
 			throw new NoSuchElementException();
 		} else {
-			IntNode current = head;
+			if (index == 0) {
+				return removeFirst();
+			} else if (index == numNodes - 1) {
+				return removeLast();
+			} else {
+				IntNode current = head;
 
-			for (int i = 0; i < index - 1; i++) {
-				current = current.getLink();
+				for (int i = 0; i < index - 1; i++) {
+					current = current.getLink();
+				}
+
+				int i = current.getLink().getData();
+				current.setLink(current.getLink().getLink());
+
+				if (i == numNodes - 1) {
+					tail = current;
+				}
+
+				numNodes--;
+				return i;
 			}
-
-			int i = current.getLink().getData();
-			current.setLink(current.getLink().getLink());
-			numNodes--;
-			return i;
 		}
 	}
 
@@ -120,6 +131,9 @@ public class LinkedList {
 		} else {
 			int value = head.getData();
 			head = head.getLink();
+			if (numNodes == 1) {
+				tail = null;
+			}
 			numNodes--;
 			return value;
 		}
@@ -133,6 +147,9 @@ public class LinkedList {
 			for (int i = 0; i < numNodes - 1; i++) {
 				if (current.getLink().getData() == value) {
 					current.setLink(current.getLink().getLink());
+					if (i == numNodes - 2) {
+						tail = current;
+					}
 					numNodes--;
 					return true;
 				} else {
@@ -155,36 +172,52 @@ public class LinkedList {
 			int i = current.getLink().getData();
 			current.setLink(null);
 			numNodes--;
+			tail = current;
 			return i;
 		}
 	}
 
 	public boolean removeLastOccurence(int value) throws NoSuchElementException {
-		IntNode current = head;
-		int index;
-		if (current.getData() == value) {
-			index = 0;
-		} else {
-			index = -1;
-		}
 		if (numNodes == 0) {
 			throw new NoSuchElementException();
 		} else {
-			for (int i = 0; i < numNodes - 1; i++) {
-				if (current.getLink().getData() == value) {
-					index = i;
-				}
+			IntNode current = head;
+			int index;
+			if (current.getData() == value) {
+				index = 0;
+			} else {
+				index = -1;
 			}
 
-			System.out.println(index);
-			
-			current = head;
-			for (int i = 0; i < index - 1; i++) {
+			for (int i = 0; i < numNodes; i++) {
+				if (current.getData() == value) {
+					index = i;
+				}
 				current = current.getLink();
 			}
-			current.setLink(current.getLink().getLink());
-			numNodes--;
-			return true;
+
+			if (index == -1) {
+				return false;
+			} else if (index == 0) {
+				removeFirst();
+				return true;
+			} else if (index == numNodes - 1) {
+				removeLast();
+				return true;				
+			} else {
+				current = head;
+				for (int i = 0; i < index - 1; i++) {
+					current = current.getLink();
+				}
+
+				current.setLink(current.getLink().getLink());
+				if (index == numNodes - 1) {
+					tail = current;
+				}
+
+				numNodes--;
+				return true;
+			}
 		}
 	}
 
@@ -219,15 +252,15 @@ public class LinkedList {
 		}
 		return arr;
 	}
-	
+
 	public String toString() {
 		String str = "";
 		int[] arr = this.toArr();
 		str += ("[");
-		for (int i = 0; i < arr.length-1; i++) {
+		for (int i = 0; i < arr.length - 1; i++) {
 			str += (arr[i] + " ");
 		}
-		str += (arr[arr.length-1] + "]");
+		str += (arr[arr.length - 1] + "]");
 		return str;
 	}
 }
