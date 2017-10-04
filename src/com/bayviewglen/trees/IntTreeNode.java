@@ -1,4 +1,4 @@
-package com.bayviewglen.packages;
+package com.bayviewglen.trees;
 
 public class IntTreeNode {
 	private int data;
