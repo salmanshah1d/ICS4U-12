@@ -2,82 +2,50 @@ package com.bayviewglen.arrays;
 
 import java.util.Arrays;
 
+import com.bayviewglen.trees.BST;
+
 public class AddressBook {
-	private Contact[] contacts;
+	private BST contacts;
 	private int numContacts;
 
 	public AddressBook() {
-		contacts = new Contact[1000];
+		contacts = new BST();
 		numContacts = 0;
 	}
 
 	public String toString() {
-		String print = "";
-
-		Arrays.sort(contacts, 0, numContacts, new SortClassByName());
-
-		for (int j = 0; j < numContacts; j++) {
-			print += contacts[j] + "\n";
-		}
-
-		return print;
+		contacts.inOrderTraversal(contacts.getRoot());
+		return ("");
 	}
 
 	public void add(Contact contact) {
-		int index = -1;
-
-		for (int i = 0; i < numContacts; i++) {
-			if (contact.compare(contacts[i]) == 0) {
-				index = i;
-			}
-		}
-
-		if (index == -1) {
-			contacts[numContacts] = contact;
+		if (contacts.ifExists(contact)) {
+			System.out.println("This contact already exists.");
+		} else {
+			contacts.add(contact);
 			numContacts += 1;
 			System.out.print("Contact added: " + contact + "\n");
-		} else {
-			System.out.println("This contact already exists.");
 		}
 	}
 
 	public void read(Contact contact) {
-		contacts[numContacts] = contact;
+		contacts.add(contact);
 		numContacts += 1;
 	}
 
 	public void delete(String first, String last) {
-		int index = -1;
-		for (int i = 0; i < numContacts; i++) {
-			if (contacts[i].getFirst().equals(first) && contacts[i].getLast().equals(last)) {
-				index = i;
-			}
-		}
-
-		if (index == -1) {
-			System.out.println("This contact does not exist.");
+		boolean deleted = contacts.delete(first, last);
+		
+		if (deleted) {
+			numContacts--;
+			System.out.println("Deleted.");
 		} else {
-			for (int j = index; j < numContacts; j++) {
-				contacts[j] = contacts[j + 1];
-			}
+			System.out.println("Contact not found");
 		}
-
-		numContacts--;
 	}
 
 	public void search(String first, String last) {
-		int index = -1;
-		for (int i = 0; i < numContacts; i++) {
-			if (contacts[i].getFirst().equals(first) && contacts[i].getLast().equals(last)) {
-				index = i;
-			}
-		}
-
-		if (index == -1) {
-			System.out.println("This contact does not exist.");
-		} else {
-			System.out.println(contacts[index]);
-		}
+		contacts.search(first, last);
 	}
 
 	public String getNumContacts() {

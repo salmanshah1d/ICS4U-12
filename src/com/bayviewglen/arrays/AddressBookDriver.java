@@ -11,16 +11,15 @@ public class AddressBookDriver {
 
 	public static void main(String[] args) throws IOException {
 		// add all, show all, search for specific, delete specific
-		AddressBook contacts = new AddressBook();
+		AddressBookOld contacts = new AddressBookOld();
 		populate(contacts);
 		boolean demo = true;
 		String option, first, last, number;
 		Scanner keyboard = new Scanner(System.in);
 		Contact newContact;
-
+		
 		System.out.println("Welcome to Contacts.");
-		System.out.println("");
-
+		
 		while (demo) {
 			option = printMenu();
 
@@ -63,7 +62,7 @@ public class AddressBookDriver {
 		System.out.print("Thank you. Come again.");
 	}
 
-	private static void populate(AddressBook contacts) {
+	private static void populate(AddressBookOld contacts) {
 
 		BufferedReader br = null;
 		
@@ -77,7 +76,7 @@ public class AddressBookDriver {
 			while (contentLine != null) {
 				first = contentLine.split(" ")[0].trim();
 				last = contentLine.split(" ")[1].trim();
-				number = contentLine.substring(first.length()+last.length()+1, contentLine.length()).trim();
+				number = contentLine.split(" ")[2].trim();
 				contacts.read(new Contact(first, last, number));
 				contentLine = br.readLine();
 			}
@@ -96,7 +95,7 @@ public class AddressBookDriver {
 		}
 	}
 
-	private static void save(AddressBook contacts) throws IOException {
+	private static void save(AddressBookOld contacts) throws IOException {
 		String str = "";
 		str += contacts.toString();
 		BufferedWriter writer = new BufferedWriter(new FileWriter("data/words.dat"));
@@ -106,6 +105,7 @@ public class AddressBookDriver {
 
 	private static String printMenu() {
 		Scanner keyboard = new Scanner(System.in);
+		System.out.println("");
 		System.out.println("1: Add Contact");
 		System.out.println("2: Display Contacts ");
 		System.out.println("3: Search");
@@ -113,7 +113,6 @@ public class AddressBookDriver {
 		System.out.println("5: Exit");
 		System.out.println();
 		System.out.print("Enter one of the options above: ");
-		System.out.println();
 		return textCheck(keyboard.nextLine());
 	}
 
@@ -190,7 +189,8 @@ public class AddressBookDriver {
 				valid = false;
 			}
 		}
-
-		return "(" + input.substring(0, 3) + ") " + input.substring(3, 6) + "-" + input.substring(6, 10);
+		
+		// "(" + input.substring(0, 3) + ") " + input.substring(3, 6) + "-" + input.substring(6, 10)
+		return input;
 	}
 }

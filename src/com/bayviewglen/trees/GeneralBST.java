@@ -1,35 +1,28 @@
 package com.bayviewglen.trees;
 
-import com.bayviewglen.arrays.Contact;
+public class GeneralBST {
+	IntTreeNode root;
 
-public class BST {
-	TreeNode root;
-
-	public BST(TreeNode root) {
-		super();
-		this.root = root;
-	}
-
-	public BST() {
+	public GeneralBST() {
 		super();
 		this.root = null;
 	}
 
-	public TreeNode getRoot() {
+	public IntTreeNode getRoot() {
 		return root;
 	}
 
-	private void add(TreeNode current, Comparable<Contact> x) {
-		if (x.compareTo((Contact) current.getData()) < 0) {
+	private void add(IntTreeNode current, int x) {
+		if (x < current.getData()) {
 			if (current.getLeft() == null) {
-				TreeNode temp = new TreeNode(x);
+				IntTreeNode temp = new IntTreeNode(x);
 				current.setLeft(temp);
 			} else {
 				add(current.getLeft(), x);
 			}
 		} else {
 			if (current.getRight() == null) {
-				TreeNode temp = new TreeNode(x);
+				IntTreeNode temp = new IntTreeNode(x);
 				current.setRight(temp);
 			} else {
 				add(current.getRight(), x);
@@ -37,69 +30,42 @@ public class BST {
 		}
 	}
 
-	public void add(Comparable<Contact> x) {
+	public void add(int x) {
 		if (root == null) {
-			TreeNode temp = new TreeNode(x);
+			IntTreeNode temp = new IntTreeNode(x);
 			root = temp;
 		} else {
 			add(root, x);
 		}
 	}
 
-	private String search(TreeNode current, Comparable<Contact> x) {
-		if (x.compareTo((Contact) current.getData()) == 0) {
-			return ((Contact) (current).getData()).getNumber();
-		} else if (x.compareTo((Contact) current.getData()) < 0) {
+	private boolean search(IntTreeNode current, int x) {
+		if (current.getData() == x) {
+			return true;
+		} else if (x < current.getData()) {
 			if (current.getLeft() == null) {
-				return "Contact not found.";
+				return false;
 			} else {
 				return search(current.getLeft(), x);
 			}
 		} else {
 			if (current.getRight() == null) {
-				return "Contact not found.";
+				return false;
 			} else {
 				return search(current.getRight(), x);
 			}
 		}
 	}
 
-	public String search(String x, String y) {
-		Contact toFind = new Contact(x, y);
-		if ((root.getData()).compareTo(toFind) == 0) {
-			return ((Contact) root.getData()).getNumber();
-		} else {
-			return search(root, toFind);
-		}
-	}
-
-	private boolean ifExists(TreeNode current, Comparable<Contact> x) {
-		if (x.compareTo((Contact) current.getData()) == 0) {
-			return true;
-		} else if (x.compareTo((Contact) current.getData()) < 0) {
-			if (current.getLeft() == null) {
-				return false;
-			} else {
-				return ifExists(current.getLeft(), x);
-			}
-		} else {
-			if (current.getRight() == null) {
-				return false;
-			} else {
-				return ifExists(current.getRight(), x);
-			}
-		}
-	}
-
-	public boolean ifExists(Contact toFind) {
-		if ((root.getData()).compareTo(toFind) == 0) {
+	public boolean search(int x) {
+		if (root.getData() == x) {
 			return true;
 		} else {
-			return ifExists(root, toFind);
+			return search(root, x);
 		}
 	}
-	
-	public void inOrderTraversal(TreeNode current) {
+
+	public void inOrderTraversal(IntTreeNode current) {
 		if (current.getLeft() != null) {
 			inOrderTraversal(current.getLeft());
 		}
@@ -109,7 +75,7 @@ public class BST {
 		}
 	}
 
-	public void preorderTraversal(TreeNode current) {
+	public void preorderTraversal(IntTreeNode current) {
 		evaluate(current);
 
 		if (current.getLeft() != null) {
@@ -121,7 +87,7 @@ public class BST {
 		}
 	}
 
-	public void postorderTraversal(TreeNode current) {
+	public void postorderTraversal(IntTreeNode current) {
 		if (current.getLeft() != null) {
 			inOrderTraversal(current.getLeft());
 		}
@@ -133,15 +99,14 @@ public class BST {
 		evaluate(current);
 	}
 
-	public boolean delete(String first, String last) {
-		Contact x = new Contact(first, last);
-		if ((root.getData()).compareTo(x) == 0) {
+	public boolean delete(int x) {
+		if (root.getData() == x) {
 			if (root.getRight() != null && root.getLeft() == null) {
 				root = root.getRight();
 			} else if (root.getRight() == null && root.getLeft() != null) {
 				root = root.getLeft();
 			} else if (root.getRight() != null && root.getLeft() != null) {
-				TreeNode tempNode = root.getRight();
+				IntTreeNode tempNode = root.getRight();
 				if (tempNode.getLeft() == null) {
 					root.setData(tempNode.getData());
 					root.setRight(null);
@@ -161,17 +126,17 @@ public class BST {
 		}
 	}
 
-	private void rebalance(TreeNode current, Comparable<Contact> x) {
-		if (current.getRight() != null && current.getRight().getData().compareTo(x) == 0) {
+	private void rebalance(IntTreeNode current, int x) {
+		if (current.getRight() != null && current.getRight().getData() == x) {
 			if (current.getRight().getLeft() == null && current.getRight().getRight() == null) {
-				current.setRight(null);
+				current.setLeft(null);
 			} else if (current.getRight().getLeft() == null) {
 				current.setRight(current.getRight().getRight());
 			} else if (current.getRight().getRight() == null) {
 				current.setRight(current.getRight().getLeft());
 			} else {
-				TreeNode tempNode = current.getRight().getRight();
-				Comparable<Contact> temp;
+				IntTreeNode tempNode = current.getRight().getRight();
+				int temp;
 				if (tempNode.getLeft() != null) {
 					while (tempNode.getLeft().getLeft() != null) {
 						tempNode = tempNode.getLeft();
@@ -192,8 +157,8 @@ public class BST {
 			} else if (current.getLeft().getRight() == null) {
 				current.setLeft(current.getLeft().getLeft());
 			} else {
-				TreeNode tempNode = current.getLeft().getRight();
-				Comparable<Contact> temp;
+				IntTreeNode tempNode = current.getLeft().getRight();
+				int temp;
 				if (tempNode.getLeft() != null) {
 					while (tempNode.getLeft().getLeft() != null) {
 						tempNode = tempNode.getLeft();
@@ -209,23 +174,22 @@ public class BST {
 		}
 	}
 
-	private boolean delete(TreeNode current, Comparable<Contact> x) {
-		if (current.getLeft() != null && current.getLeft().getData().compareTo(x) == 0) {
+	private boolean delete(IntTreeNode current, int x) {
+		if (current.getLeft() != null && current.getLeft().getData() == x) {
 			rebalance(current, x);
 			return true;
-		} else if (current.getRight() != null && current.getRight().getData().compareTo(x) == 0) {
+		} else if (current.getRight() != null && current.getRight().getData() == x) {
 			rebalance(current, x);
 			return true;
-		} else if (x.compareTo((Contact) current.getData()) < 0 && current.getRight() != null) {
+		} else if (current.getData() < x && current.getRight() != null) {
 			return delete(current.getRight(), x);
-		} else if (x.compareTo((Contact) current.getData()) > 0 && current.getLeft() != null) {
+		} else if (current.getData() > x && current.getLeft() != null) {
 			return delete(current.getLeft(), x);
 		} else {
 			return false;
 		}
 	}
 
-	private void evaluate(TreeNode current) {
-		System.out.println(current.getData());
+	private void evaluate(IntTreeNode current) {
 	}
 }
