@@ -1,5 +1,8 @@
 package com.bayviewglen.trees;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import com.bayviewglen.arrays.Contact;
 
 public class BST {
@@ -48,7 +51,7 @@ public class BST {
 
 	private String search(TreeNode current, Comparable<Contact> x) {
 		if (x.compareTo((Contact) current.getData()) == 0) {
-			return ((Contact) (current).getData()).getNumber();
+			return ((Contact) (current).getData()).toString();
 		} else if (x.compareTo((Contact) current.getData()) < 0) {
 			if (current.getLeft() == null) {
 				return "Contact not found.";
@@ -66,7 +69,9 @@ public class BST {
 
 	public String search(String x, String y) {
 		Contact toFind = new Contact(x, y);
-		if ((root.getData()).compareTo(toFind) == 0) {
+		if (root == null) {
+			return "Contact not found.";
+		} else if ((root.getData()).compareTo(toFind) == 0) {
 			return ((Contact) root.getData()).getNumber();
 		} else {
 			return search(root, toFind);
@@ -91,14 +96,17 @@ public class BST {
 		}
 	}
 
-	public boolean ifExists(Contact toFind) {
-		if ((root.getData()).compareTo(toFind) == 0) {
+	public boolean ifExists(String first, String last) {
+		Contact toFind = new Contact(first, last);
+		if (root == null) {
+			return false;
+		} else if ((root.getData()).compareTo(toFind) == 0) {
 			return true;
 		} else {
 			return ifExists(root, toFind);
 		}
 	}
-	
+
 	public void inOrderTraversal(TreeNode current) {
 		if (current.getLeft() != null) {
 			inOrderTraversal(current.getLeft());
@@ -135,7 +143,9 @@ public class BST {
 
 	public boolean delete(String first, String last) {
 		Contact x = new Contact(first, last);
-		if ((root.getData()).compareTo(x) == 0) {
+		if (root == null) {
+			return false;
+		} else if ((root.getData()).compareTo(x) == 0) {
 			if (root.getRight() != null && root.getLeft() == null) {
 				root = root.getRight();
 			} else if (root.getRight() == null && root.getLeft() != null) {
@@ -227,5 +237,17 @@ public class BST {
 
 	private void evaluate(TreeNode current) {
 		System.out.println(current.getData());
+	}
+
+	public void save(TreeNode current, BufferedWriter writer) throws IOException {
+		if (current.getLeft() != null) {
+			save(current.getLeft(), writer);
+		}
+		
+		writer.append(current.getData().toString() + "\n");
+		
+		if (current.getRight() != null) {
+			save(current.getRight(), writer);
+		}
 	}
 }

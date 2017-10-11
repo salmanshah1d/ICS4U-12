@@ -129,8 +129,13 @@ public class IntBST {
 						tempNode = tempNode.getLeft();
 					}
 					temp = tempNode.getLeft().getData();
-					tempNode.setLeft(null);
+					if (tempNode.getLeft().getRight() != null) {
+						tempNode.setLeft(tempNode.getLeft().getRight());
+					} else {
+						tempNode.setLeft(null);
+					}
 				} else {
+					tempNode.setLeft(null);
 					temp = tempNode.getData();
 					current.getRight().setRight(null);
 				}

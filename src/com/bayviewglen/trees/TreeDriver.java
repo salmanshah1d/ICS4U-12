@@ -6,25 +6,12 @@ public class TreeDriver {
 
 	public static void main(String[] args) {
 		BST sal = new BST();
-		GeneralBST salman = new GeneralBST();
-		sal.add((Comparable)new Contact("Salman","Shahid","6479099672"));
-		sal.add((Comparable)new Contact("Salman","Sgahid","6479099672"));
-		sal.add((Comparable)new Contact("Salman","Sjahid","6479099672"));
-		sal.add((Comparable)new Contact("Salman","Siahid","6479099672"));
-		sal.add((Comparable)new Contact("Salman","Skahid","6479099672"));
-		sal.delete("Salman", "Shahid");
+		sal.add(new Contact("a", "b", "1"));
+		sal.add(new Contact("a", "c", "12"));
+		sal.add(new Contact("a", "d", "13"));
+		sal.add(new Contact("a", "e", "1234567890"));
+		String salm = sal.inOrderString(sal.getRoot());
 		
-		System.out.println("             " + sal.getRoot().getData());
-		System.out.print(sal.getRoot().getLeft().getData());
-		System.out.println("   " + sal.getRoot().getRight().getData());
-		System.out.println("                               " + sal.getRoot().getRight().getRight().getData());
-		
-		/*salman.add(0);
-		salman.add(1);
-		salman.add(3);
-		salman.add(2);
-		salman.delete(0);
-		
-		System.out.println(salman.getRoot().getData());*/
+		System.out.println(sal.ifExists("a", "b", "1234567890"));
 	}
 }

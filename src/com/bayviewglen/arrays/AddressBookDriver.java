@@ -7,19 +7,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import com.bayviewglen.trees.BST;
+
 public class AddressBookDriver {
 
 	public static void main(String[] args) throws IOException {
 		// add all, show all, search for specific, delete specific
-		AddressBookOld contacts = new AddressBookOld();
+		BST contacts = new BST();
 		populate(contacts);
 		boolean demo = true;
 		String option, first, last, number;
 		Scanner keyboard = new Scanner(System.in);
 		Contact newContact;
-		
+
 		System.out.println("Welcome to Contacts.");
-		
+
 		while (demo) {
 			option = printMenu();
 
@@ -29,28 +31,41 @@ public class AddressBookDriver {
 				first = alpha(keyboard.nextLine(), 1);
 				System.out.print("Enter last name: ");
 				last = alpha(keyboard.nextLine(), 2);
-				System.out.print("Enter phone number: ");
-				number = numeric((keyboard.nextLine()));
 
-				newContact = new Contact(first, last, number);
-				contacts.add(newContact);
+				if (contacts.ifExists(first, last)) {
+					System.out.println("This contact already exists.");
+				} else {
+					System.out.print("Enter phone number: ");
+					number = numeric((keyboard.nextLine()));
+					newContact = new Contact(first, last, number);
+					contacts.add(newContact);
+					System.out.println(newContact + " has been added.");
+				}
 
 			} else if (option.equals("2")) {
-				System.out.println(contacts);
-
+				if (contacts.getRoot() == null) {
+					System.out.println("This address book is empty.");
+				} else {
+					contacts.inOrderTraversal(contacts.getRoot());
+				}
 			} else if (option.equals("3")) {
 				System.out.print("Enter first name: ");
 				first = alpha(keyboard.nextLine(), 1);
 				System.out.print("Enter last name: ");
 				last = alpha(keyboard.nextLine(), 2);
-				contacts.search(first, last);
+				System.out.println(contacts.search(first, last));
 
 			} else if (option.equals("4")) {
 				System.out.print("Enter first name: ");
 				first = alpha(keyboard.nextLine(), 1);
 				System.out.print("Enter last name: ");
 				last = alpha(keyboard.nextLine(), 2);
-				contacts.delete(first, last);
+				boolean done = contacts.delete(first, last);
+				if (done) {
+					System.out.println(first + " " + last + " has been deleted.");
+				} else {
+					System.out.println(first + " " + last + " does not exist.");
+				}
 
 			} else if (option.equals("5")) {
 				demo = false;
@@ -60,24 +75,25 @@ public class AddressBookDriver {
 		}
 
 		System.out.print("Thank you. Come again.");
+
 	}
 
-	private static void populate(AddressBookOld contacts) {
+	private static void populate(BST contacts) {
 
 		BufferedReader br = null;
-		
+
 		try {
 			br = new BufferedReader(new FileReader("data/words.dat"));
-			String first, last, number; 
-			
+			String first, last, number;
+
 			// One way of reading the file
 			String contentLine = br.readLine();
-			
+
 			while (contentLine != null) {
 				first = contentLine.split(" ")[0].trim();
 				last = contentLine.split(" ")[1].trim();
 				number = contentLine.split(" ")[2].trim();
-				contacts.read(new Contact(first, last, number));
+				contacts.add(new Contact(first, last, number));
 				contentLine = br.readLine();
 			}
 
@@ -87,7 +103,7 @@ public class AddressBookDriver {
 			try {
 				if (br != null)
 					br.close();
-				
+
 			} catch (IOException ioe) {
 				System.out.println("Error in closing the BufferedReader");
 			}
@@ -95,11 +111,9 @@ public class AddressBookDriver {
 		}
 	}
 
-	private static void save(AddressBookOld contacts) throws IOException {
-		String str = "";
-		str += contacts.toString();
+	private static void save(BST contacts) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter("data/words.dat"));
-		writer.append(str);
+		contacts.save(contacts.getRoot(), writer);
 		writer.close();
 	}
 
@@ -189,8 +203,9 @@ public class AddressBookDriver {
 				valid = false;
 			}
 		}
-		
-		// "(" + input.substring(0, 3) + ") " + input.substring(3, 6) + "-" + input.substring(6, 10)
+
+		// "(" + input.substring(0, 3) + ") " + input.substring(3, 6) + "-" +
+		// input.substring(6, 10)
 		return input;
 	}
 }

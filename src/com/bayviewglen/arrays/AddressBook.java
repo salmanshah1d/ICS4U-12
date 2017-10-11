@@ -1,7 +1,5 @@
 package com.bayviewglen.arrays;
 
-import java.util.Arrays;
-
 import com.bayviewglen.trees.BST;
 
 public class AddressBook {
@@ -13,9 +11,8 @@ public class AddressBook {
 		numContacts = 0;
 	}
 
-	public String toString() {
+	public void print() {
 		contacts.inOrderTraversal(contacts.getRoot());
-		return ("");
 	}
 
 	public void add(Contact contact) {
