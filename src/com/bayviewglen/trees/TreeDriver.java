@@ -10,8 +10,5 @@ public class TreeDriver {
 		sal.add(new Contact("a", "c", "12"));
 		sal.add(new Contact("a", "d", "13"));
 		sal.add(new Contact("a", "e", "1234567890"));
-		String salm = sal.inOrderString(sal.getRoot());
-		
-		System.out.println(sal.ifExists("a", "b", "1234567890"));
 	}
 }
