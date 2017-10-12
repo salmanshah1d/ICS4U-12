@@ -12,78 +12,82 @@ import com.bayviewglen.trees.BST;
 public class AddressBookDriver {
 
 	public static void main(String[] args) throws IOException {
-		// add all, show all, search for specific, delete specific
-		BST contacts = new BST();
-		populate(contacts);
+		BST contacts = new BST(); // instantiates the BST
+		populate(contacts); // reads in previous contacts
 		boolean demo = true;
-		String option, first, last, number;
+		String option, first, last, number; 
 		Scanner keyboard = new Scanner(System.in);
 		Contact newContact;
 
 		System.out.println("Welcome to Contacts.");
 
-		while (demo) {
+		while (demo) { // loop that closes the program and saves the BST to a .dat file when the user quits
 			option = printMenu();
 
-			if (option.equals("1")) {
+			if (option.equals("1")) { // adds contact
 
 				System.out.print("Enter first name: ");
 				first = alpha(keyboard.nextLine(), 1);
 				System.out.print("Enter last name: ");
 				last = alpha(keyboard.nextLine(), 2);
 
-				if (contacts.ifExists(first, last)) {
+				if (contacts.ifExists(first, last)) { // checks if contact already exists then implements accordingly
 					System.out.println("This contact already exists.");
 				} else {
 					System.out.print("Enter phone number: ");
 					number = numeric((keyboard.nextLine()));
 					newContact = new Contact(first, last, number);
 					contacts.add(newContact);
-					System.out.println(newContact + " has been added.");
+					System.out.println(newContact.toString2() + " has been added.");
 				}
 
-			} else if (option.equals("2")) {
+			} else if (option.equals("2")) { // displays contacts
 				if (contacts.getRoot() == null) {
-					System.out.println("This address book is empty.");
+					System.out.println("You don't have any contacts.");
 				} else {
 					contacts.inOrderTraversal(contacts.getRoot());
 				}
-			} else if (option.equals("3")) {
-				System.out.print("Enter first name: ");
-				first = alpha(keyboard.nextLine(), 1);
-				System.out.print("Enter last name: ");
-				last = alpha(keyboard.nextLine(), 2);
-				System.out.println(contacts.search(first, last));
-
-			} else if (option.equals("4")) {
-				System.out.print("Enter first name: ");
-				first = alpha(keyboard.nextLine(), 1);
-				System.out.print("Enter last name: ");
-				last = alpha(keyboard.nextLine(), 2);
-				boolean done = contacts.delete(first, last);
-				if (done) {
-					System.out.println(first + " " + last + " has been deleted.");
+				
+			} else if (option.equals("3")) { // searches contacts
+				if (contacts.getRoot() == null) {
+					System.out.println("You don't have any contacts.");
 				} else {
-					System.out.println(first + " " + last + " does not exist.");
+					System.out.print("Enter first name: ");
+					first = alpha(keyboard.nextLine(), 1);
+					System.out.print("Enter last name: ");
+					last = alpha(keyboard.nextLine(), 2);
+					System.out.println(contacts.search(first, last));
 				}
 
-			} else if (option.equals("5")) {
+			} else if (option.equals("4")) { // deletes contacts
+				if (contacts.getRoot() == null) {
+					System.out.println("You don't have any contacts.");
+				} else {
+					System.out.print("Enter first name: ");
+					first = alpha(keyboard.nextLine(), 1);
+					System.out.print("Enter last name: ");
+					last = alpha(keyboard.nextLine(), 2);
+					boolean done = contacts.delete(first, last);
+					if (done) {
+						System.out.println(first + " " + last + " has been deleted.");
+					} else {
+						System.out.println(first + " " + last + " is not in your contact list.");
+					}
+				}
+			} else if (option.equals("5")) { // quits app
 				demo = false;
 				save(contacts);
 			}
-
 		}
-
 		System.out.print("Thank you. Come again.");
-
 	}
 
-	private static void populate(BST contacts) {
+	private static void populate(BST contacts) { // reads in from .dat file
 
 		BufferedReader br = null;
 
 		try {
-			br = new BufferedReader(new FileReader("data/words.dat"));
+			br = new BufferedReader(new FileReader("data/contacts.dat"));
 			String first, last, number;
 
 			// One way of reading the file
@@ -98,7 +102,7 @@ public class AddressBookDriver {
 			}
 
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			// does nothing so that if there's no input file it just assumes an empty BST
 		} finally {
 			try {
 				if (br != null)
@@ -111,13 +115,15 @@ public class AddressBookDriver {
 		}
 	}
 
-	private static void save(BST contacts) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter("data/words.dat"));
-		contacts.save(contacts.getRoot(), writer);
+	private static void save(BST contacts) throws IOException { // saves to .dat file
+		BufferedWriter writer = new BufferedWriter(new FileWriter("data/contacts.dat"));
+		if (contacts.getRoot() != null) {
+			contacts.save(contacts.getRoot(), writer);
+		}
 		writer.close();
 	}
 
-	private static String printMenu() {
+	private static String printMenu() { // prints options
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("");
 		System.out.println("1: Add Contact");
@@ -130,7 +136,7 @@ public class AddressBookDriver {
 		return textCheck(keyboard.nextLine());
 	}
 
-	private static String textCheck(String input) {
+	private static String textCheck(String input) { // checks valid input
 		Scanner keyboard = new Scanner(System.in);
 		while (!(input.equals("1") || input.equals("2") || input.equals("3") || input.equals("4")
 				|| input.equals("5"))) {
@@ -141,7 +147,7 @@ public class AddressBookDriver {
 		return input;
 	}
 
-	private static String alpha(String input, int num) {
+	private static String alpha(String input, int num) { // checks valid alphabet input
 		Scanner keyboard = new Scanner(System.in);
 		String message;
 		boolean valid = true;
@@ -174,7 +180,7 @@ public class AddressBookDriver {
 		return input;
 	}
 
-	private static String numeric(String input) {
+	private static String numeric(String input) { // checks valid numerical (string) input
 		final int NUM_LENGTH = 10;
 		Scanner keyboard = new Scanner(System.in);
 		boolean valid = true;
@@ -204,8 +210,6 @@ public class AddressBookDriver {
 			}
 		}
 
-		// "(" + input.substring(0, 3) + ") " + input.substring(3, 6) + "-" +
-		// input.substring(6, 10)
 		return input;
 	}
 }

@@ -26,7 +26,7 @@ public class Contact implements Comparable<Contact> {
 	public String toString() {
 		return first + " " + last + " " + number;
 	}
-
+	
 	public String getFirst() {
 		return first;
 	}
@@ -53,5 +53,9 @@ public class Contact implements Comparable<Contact> {
 	
 	public int compareTo(Contact b) {
 		return (this.getLast() + this.getFirst()).compareTo(b.getLast() + b.getFirst());
+	}
+
+	public String toString2() {
+		return first + " " + last + " " + "(" + number.substring(0, 3) + ") " + number.substring(3, 6) + "-" + number.substring(6, number.length());
 	}
 }
