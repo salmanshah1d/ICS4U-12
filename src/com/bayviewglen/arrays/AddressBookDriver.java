@@ -25,7 +25,6 @@ public class AddressBookDriver {
 			option = printMenu();
 
 			if (option.equals("1")) { // adds contact
-
 				System.out.print("Enter first name: ");
 				first = alpha(keyboard.nextLine(), 1);
 				System.out.print("Enter last name: ");

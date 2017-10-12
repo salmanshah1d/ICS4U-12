@@ -7,22 +7,25 @@ public class LinkedList {
 	private IntNode tail;
 	private int numNodes;
 
-	public LinkedList() {
+	public LinkedList() { // constructor
 		head = null;
 		tail = null;
 		numNodes = 0;
 	}
 
-	public void addFirst(int x) {
-		head = new IntNode(x, head);
+	public boolean add(int value) { // Appends the specified element to the end of this list.
 		if (numNodes == 0) {
-			tail = head;
+			addFirst(value);
+		} else {
+			IntNode newNode = new IntNode(value, null);
+			tail.setLink(newNode);
+			tail = newNode;
+			numNodes++;
 		}
-
-		numNodes++;
+		return true;
 	}
 
-	public void add(int index, int value) {
+	public void add(int index, int value) { // Inserts the specified element at the specified position in this list.
 		if (index == 0) {
 			addFirst(value);
 		} else {
@@ -35,25 +38,22 @@ public class LinkedList {
 		}
 	}
 
-	public boolean add(int value) {
+	public void addFirst(int x) { // Inserts the specified element at the beginning of this list.
+		head = new IntNode(x, head);
 		if (numNodes == 0) {
-			addFirst(value);
-		} else {
-			IntNode newNode = new IntNode(value, null);
-			tail.setLink(newNode);
-			tail = newNode;
-			numNodes++;
+			tail = head;
 		}
-		return true;
+
+		numNodes++;
 	}
 
-	public void clear() {
+	public void clear() { // Removes all of the elements from this list.
 		head = null;
 		tail = null;
 		numNodes = 0;
 	}
 
-	public boolean contains(int value) {
+	public boolean contains(int value) { // Returns true if this list contains the specified element.
 		IntNode current = head;
 		for (int i = 0; i < numNodes; i++) {
 			if (current.getData() == value) {
@@ -65,7 +65,8 @@ public class LinkedList {
 		return false;
 	}
 
-	public int get(int index) throws ListIndexOutOfBoundsException {
+	public int get(int index) throws ListIndexOutOfBoundsException { // Returns the element at the specified position in
+																		// this list.
 		IntNode current = head;
 		if (index > numNodes) {
 			throw new ListIndexOutOfBoundsException();
@@ -77,7 +78,7 @@ public class LinkedList {
 		}
 	}
 
-	public int getFirst() throws NoSuchElementException {
+	public int getFirst() throws NoSuchElementException { // Returns the first element in this list.
 		if (numNodes == 0) {
 			throw new NoSuchElementException();
 		} else {
@@ -85,7 +86,7 @@ public class LinkedList {
 		}
 	}
 
-	public int getLast() throws NoSuchElementException {
+	public int getLast() throws NoSuchElementException { // Returns the last element in this list.
 		if (numNodes == 0) {
 			throw new NoSuchElementException();
 		} else {
@@ -97,7 +98,22 @@ public class LinkedList {
 		}
 	}
 
-	public int remove(int index) {
+	public int removeFirst() throws NoSuchElementException { // Retrieves and removes the head (first element) of this
+																// list.
+		if (numNodes == 0) {
+			throw new NoSuchElementException();
+		} else {
+			int value = head.getData();
+			head = head.getLink();
+			if (numNodes == 1) {
+				tail = null;
+			}
+			numNodes--;
+			return value;
+		}
+	}
+
+	public int remove(int index) { // Removes the element at the specified position in this list.
 		if (index > numNodes) {
 			throw new NoSuchElementException();
 		} else {
@@ -125,21 +141,8 @@ public class LinkedList {
 		}
 	}
 
-	public int removeFirst() throws NoSuchElementException {
-		if (numNodes == 0) {
-			throw new NoSuchElementException();
-		} else {
-			int value = head.getData();
-			head = head.getLink();
-			if (numNodes == 1) {
-				tail = null;
-			}
-			numNodes--;
-			return value;
-		}
-	}
-
-	public boolean removeFirstOccurence(int value) {
+	public boolean removeFirstOccurence(int value) { // Removes the first occurrence of the specified element in this
+														// list (when traversing the list from head to tail).
 		IntNode current = head;
 		if (current.getData() == value) {
 			removeFirst();
@@ -161,7 +164,7 @@ public class LinkedList {
 		return false;
 	}
 
-	public int removeLast() throws NoSuchElementException {
+	public int removeLast() throws NoSuchElementException { // Removes and returns the last element from this list.
 		if (numNodes == 0) {
 			throw new NoSuchElementException();
 		} else {
@@ -177,7 +180,10 @@ public class LinkedList {
 		}
 	}
 
-	public boolean removeLastOccurence(int value) throws NoSuchElementException {
+	public boolean removeLastOccurence(int value) throws NoSuchElementException { // Removes the last occurrence of the
+																					// specified element in this list
+																					// (when traversing the list from
+																					// head to tail).
 		if (numNodes == 0) {
 			throw new NoSuchElementException();
 		} else {
@@ -203,7 +209,7 @@ public class LinkedList {
 				return true;
 			} else if (index == numNodes - 1) {
 				removeLast();
-				return true;				
+				return true;
 			} else {
 				current = head;
 				for (int i = 0; i < index - 1; i++) {
@@ -221,7 +227,9 @@ public class LinkedList {
 		}
 	}
 
-	public int set(int index, int value) throws ListIndexOutOfBoundsException {
+	public int set(int index, int value) throws ListIndexOutOfBoundsException { // Replaces the element at the specified
+																				// position in this list with the
+																				// specified element.
 		IntNode current = head;
 		if (index > numNodes) {
 			throw new ListIndexOutOfBoundsException();
@@ -239,11 +247,12 @@ public class LinkedList {
 		return -1;
 	}
 
-	public int size() {
+	public int size() { // Returns the number of elements in this list.
 		return numNodes;
 	}
 
-	public int[] toArr() {
+	public int[] toArr() { // Returns an array containing all of the elements in this list in proper
+							// sequence (from first to last element).
 		int[] arr = new int[numNodes];
 		IntNode current = head;
 		for (int i = 0; i < numNodes; i++) {
@@ -253,7 +262,7 @@ public class LinkedList {
 		return arr;
 	}
 
-	public String toString() {
+	public String toString() { // Prints the LinkedList.
 		String str = "";
 		int[] arr = this.toArr();
 		str += ("[");

@@ -239,13 +239,13 @@ public class BST {
 		System.out.println(((Contact) current.getData()).toString2());
 	}
 
-	public void save(TreeNode current, BufferedWriter writer) throws IOException { // does an inorder traversal but saves instead of printing
+	public void save(TreeNode current, BufferedWriter writer) throws IOException { // does an preorder traversal but saves instead of printing
+		writer.append(current.getData().toString() + "\n");
+
 		if (current.getLeft() != null) {
 			save(current.getLeft(), writer);
 		}
-		
-		writer.append(current.getData().toString() + "\n");
-		
+
 		if (current.getRight() != null) {
 			save(current.getRight(), writer);
 		}
