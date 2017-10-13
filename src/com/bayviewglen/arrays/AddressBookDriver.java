@@ -50,7 +50,6 @@ public class AddressBookDriver {
 			System.out.print("Please choose 1, 2, 3, 4, or 5.");
 			input = keyboard.nextLine();
 		}
-
 		return input;
 	}
 	
