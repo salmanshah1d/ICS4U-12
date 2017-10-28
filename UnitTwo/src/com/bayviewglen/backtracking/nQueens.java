@@ -68,7 +68,7 @@ public class nQueens {
 				while (!newQueens.isEmpty()) {
 					Queen temp = newQueens.pop();
 					if (temp.getCol() == col && temp.getRow() == row) {
-						System.out.print("X ");
+						System.out.print("Q ");
 						found = true;
 					}
 				}
