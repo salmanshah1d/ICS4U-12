@@ -30,7 +30,7 @@ public class Queen {
 			output = true;
 		} else if (this.getRow() == b.getRow()) {
 			output = true;
-		} else if (Math.abs((b.getCol()-this.getCol())/(b.getRow()-this.getRow())) == 1) {
+		} else if (Math.abs(b.getCol()-this.getCol()) == Math.abs(b.getRow()-this.getRow())) {
 			output = true;
 		}
 		return output;

@@ -9,89 +9,39 @@ public class nQueens {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.print("Please enter a number: ");
 		int n = keyboard.nextInt();
-		boolean conflict = false, placed = false;
+		while (n <= 3) {
+			System.out.println("Your input has to be larger than 3.");
+			System.out.print("Please enter another number: ");
+			n = keyboard.nextInt();
+		}
+		boolean conflict = false;
 		Stack queens = new Stack<Queen>();
 		int filled = 1;
-		Queen a = new Queen(filled, 0);
+		Queen a = new Queen(filled, 1);
 
 		while (filled <= n) {
 			conflict = checkConflict(a, queens);
-			System.out.println(conflict);
-			
+
 			if (!conflict) {
+				filled++;
 				queens.push(a);
-				placed = true;
+				a = new Queen(filled, 1);
+
 			} else {
-				placed = false;
-				while (a.getCol() < n && !placed) {
-					System.out.println("ay");
+				if (a.getCol() < n) {
 					a.setCol(a.getCol() + 1);
-					conflict = checkConflict(a, queens);
-					if (!conflict) {
-						queens.push(a);
-						placed = true;
-					}
-				}
-				
-				if (!placed) {
+				} else {
 					while (((Queen) queens.peek()).getCol() == n) {
+						a = (Queen) queens.pop();
 						filled--;
-						queens.pop();
 					}
-					a = ((Queen) queens.pop());
+					a = (Queen) queens.pop();
+					filled--;
 					a.setCol(a.getCol()+1);
 				}
 			}
 
 		}
-
-		/*
-		 * while (filled <= n) { Queen a = new Queen(filled, 0); Stack<Queen> newQueens
-		 * = new Stack<Queen>(); newQueens.addAll(queens);
-		 * 
-		 * while (!newQueens.isEmpty()) { if (a.conflict(newQueens.pop())) { conflict =
-		 * true; } }
-		 * 
-		 * if (!conflict) { queens.push(a); placed = true; } else if (conflict) {
-		 * a.setCol(a.getCol() + 1); placed = false; while (!placed && a.getCol() <= n)
-		 * { newQueens = new Stack<Queen>(); newQueens.addAll(queens);
-		 * 
-		 * while (!newQueens.isEmpty()) { if (a.conflict(newQueens.pop())) { conflict =
-		 * true; } }
-		 * 
-		 * if (!conflict) { queens.push(a); placed = true; } else { a.setCol(a.getCol()
-		 * + 1); conflict = false; placed = false; } }
-		 * 
-		 * while (!placed) { while (((Queen) queens.peek()).getCol() == n) { filled--;
-		 * queens.pop(); }
-		 * 
-		 * a = (Queen) queens.pop(); a.setCol(a.getCol()+1);
-		 * 
-		 * newQueens = new Stack<Queen>(); newQueens.addAll(queens);
-		 * 
-		 * while (!newQueens.isEmpty()) { if (a.conflict(newQueens.pop())) { conflict =
-		 * true; } }
-		 * 
-		 * if (!conflict) { queens.push(a); placed = true; } else if (conflict) {
-		 * a.setCol(a.getCol() + 1); placed = false; while (!placed && a.getCol() <= n)
-		 * { newQueens = new Stack<Queen>(); newQueens.addAll(queens);
-		 * 
-		 * while (!newQueens.isEmpty()) { if (a.conflict(newQueens.pop())) { conflict =
-		 * true; } }
-		 * 
-		 * if (!conflict) { queens.push(a); placed = true; } else { a.setCol(a.getCol()
-		 * + 1); conflict = false; placed = false; } }
-		 * 
-		 * while (!placed && a.getCol() <= n) { newQueens = new Stack<Queen>();
-		 * newQueens.addAll(queens);
-		 * 
-		 * while (!newQueens.isEmpty()) { if (a.conflict(newQueens.pop())) { conflict =
-		 * true; } }
-		 * 
-		 * if (!conflict) { queens.push(a); placed = true; } else { a.setCol(a.getCol()
-		 * + 1); conflict = false; placed = false; } } } } filled++; }
-		 */
-		System.out.println(((Queen) queens.pop()).getRow());
 		display(queens, n);
 	}
 
@@ -100,7 +50,8 @@ public class nQueens {
 		newQueens.addAll(queens);
 
 		while (!newQueens.isEmpty()) {
-			if (a.conflict(newQueens.pop())) {
+			Queen popped = newQueens.pop();
+			if (a.conflict(popped)) {
 				return true;
 			}
 		}
@@ -113,7 +64,7 @@ public class nQueens {
 		newQueens.addAll(queens);
 		boolean found = false;
 		for (int row = 1; row <= n; row++) {
-			for (int col = 0; col < n; col++) {
+			for (int col = 1; col <= n; col++) {
 				while (!newQueens.isEmpty()) {
 					Queen temp = newQueens.pop();
 					if (temp.getCol() == col && temp.getRow() == row) {
