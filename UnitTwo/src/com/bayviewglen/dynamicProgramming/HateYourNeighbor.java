@@ -4,29 +4,25 @@ public class HateYourNeighbor {
 
 	public static void main(String[] args) {
 		int[] donations = {10, 2, 3, 18, 70, 90, 100}; // 173
-		// int[] donations = {10, 2, 3, 18, 2}; // 28
-		int[] result = new int[donations.length-1];
+		//int[] donations = {10, 2, 3, 18, 2}; // 28
+		int[] first = new int[donations.length-1];
+		int[] last = new int[donations.length-1];
 		
 		if (donations.length > 2) {
-			result[0] = donations[0];
-			result[1] = donations[1];
+			first[0] = donations[0];
+			first[1] = donations[0];
 			
-			for (int i = 1; i < donations.length - 2; i++) {
-				if (i+2 != donations.length-1 && donations[i+1] < donations[i+2]) {
-					first[i] = first[i-1] + donations[i+1]; 
-				} else {
-					first[i] = first[i-1] + donations[i+2];
-				}
-				
-				if (donations[i] > donations[i+1]) {
-					last[i] = last[i-1] + donations[i]; 
-				} else {
-					last[i] = last[i-1] + donations[i+1];
-				}
+			last[0] = donations[donations.length-1];
+			last[1] = donations[donations.length-1];
+			
+			for (int i = 2; i < donations.length - 1; i++) {
+				first[i] = Math.max(first[i-2] + donations[i], first[i-1]);
+				last[i] = Math.max(last[i-2] + donations[donations.length - 1 - i], last[i-1]);
 			}
-			System.out.println(Math.max(first[donations.length - 3], last[donations.length - 2]));
+			
+			System.out.println(Math.max(first[first.length - 1], last[last.length - 1]));
 		} else {
-			System.out.println(Math.max(first[0], last[1]));
+			System.out.println(Math.max(donations[0], donations[1]));
 		}
 	}
 }
