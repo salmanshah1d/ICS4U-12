@@ -1,8 +1,30 @@
 package com.bayviewglen.dynamicProgramming;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
+
 public class ContiguousSubsequence {
-	public static void main(String[] args) {
-		int[] input = {10, 9, 43, -54, 65, -87, -90, 23, 10000};
+	public static void main(String[] args) throws FileNotFoundException {
+		readInData();
+	}
+
+	private static void readInData() throws FileNotFoundException {
+		Scanner input = new Scanner(new FileReader("data/ContiguousSubsequenceTestCases.dat"));
+
+		while (input.hasNext()) { 
+			int[] arr = new int[Integer.parseInt(input.nextLine().trim())];
+			String line = input.nextLine();
+			
+			for (int i = 0; i < arr.length; i++) {
+				arr[i] = Integer.parseInt(line.split(" ")[i].trim());
+			}
+			
+			doContiguousSubsequence(arr);
+		}
+	}
+
+	private static void doContiguousSubsequence(int[] input) {
 		int[] output = new int[input.length];
 		String[] path = new String[input.length];
 		
